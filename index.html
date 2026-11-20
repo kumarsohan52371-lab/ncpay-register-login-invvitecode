@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Register UI</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f4f8fa;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      position: relative;
+    }
+
+    /* Login Screen */
+    .login-wrapper {
+      width: 100%;
+      max-width: 400px;
+      padding: 46px 24px 70px;
+      text-align: center;
+    }
+
+    .brand-logo-img {
+      width: 168px;
+      height: 158px;
+      margin: 8px auto 34px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .input-pill {
+      display: flex;
+      align-items: center;
+      height: 52px;
+      background-color: #ffffff;
+      border: 1px solid #e6ecf0;
+      border-radius: 999px;
+      padding: 0 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+    }
+
+    .input-pill input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 15px;
+      color: #1e293b;
+      padding-left: 14px;
+    }
+
+    .input-pill input::placeholder {
+      color: #a8b2be;
+      font-size: 14.5px;
+    }
+
+    .row-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 14px 2px 22px;
+      font-size: 14px;
+    }
+
+    .link-green {
+      color: #0d8254;
+      text-decoration: underline;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    /* Green Circle Checkmark */
+    .check-circle-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .check-circle-label input {
+      display: none;
+    }
+
+    .circle-badge {
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      border: 1.6px solid #22b573;
+      background-color: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background-color 0.15s;
+    }
+
+    .check-circle-label input:checked + .circle-badge {
+      background-color: #22b573;
+      border-color: #22b573;
+    }
+
+    .circle-badge svg {
+      display: none;
+    }
+
+    .check-circle-label input:checked + .circle-badge svg {
+      display: block;
+    }
+
+    .remember-text {
+      color: #0d8254;
+      font-size: 14px;
+    }
+
+    .agree-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .btn-green {
+      width: 100%;
+      height: 48px;
+      background-color: #0a8754;
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .btn-green:active {
+      background-color: #086e44;
+    }
+
+    .forget-wrap {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .forget-wrap a {
+      color: #0d8254;
+      font-size: 14px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .version-tag {
+      position: fixed;
+      right: 16px;
+      bottom: 14px;
+      font-size: 12px;
+      color: #9aa5b1;
+    }
+
+    /* Register Screen */
+    .register-wrapper {
+      width: 100%;
+      max-width: 400px;
+      min-height: 100vh;
+      background-color: #f4f8fa;
+    }
+
+    .top-bar {
+      width: 100%;
+      height: 56px;
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 26px;
+    }
+
+    .top-back-btn {
+      position: absolute;
+      left: 16px;
+      background: none;
+      border: none;
+      color: #0a8754;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .top-bar h2 {
+      color: #0a8754;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .register-form-body {
+      padding: 0 24px 36px;
+    }
+
+    .reg-country-code {
+      color: #0a8754;
+      font-size: 15px;
+      font-weight: 500;
+      margin-left: 12px;
+      padding-right: 14px;
+      border-right: 1px solid #d9e2ec;
+    }
+
+    .reg-send-btn {
+      background-color: #5cb893;
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .reg-send-btn:disabled {
+      background-color: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .reg-signup-btn {
+      margin-top: 14px;
+    }
+
+    /* OTP Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 360px;
+      border-radius: 22px;
+      padding: 22px;
+      text-align: left;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .modal-header h3 {
+      font-size: 19px;
+      color: #1e293b;
+      font-weight: 600;
+    }
+
+    .close-btn {
+      background: #f1f5f9;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 18px;
+      color: #64748b;
+      cursor: pointer;
+    }
+
+    .modal-desc {
+      font-size: 13.5px;
+      color: #0a8754;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+
+    .modal-phone {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0a8754;
+      margin-bottom: 16px;
+    }
+
+    .modal-otp-box {
+      margin-bottom: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div class="login-wrapper" id="loginView">
+    <!-- यहाँ अपना NCPAY Direct Link डालें -->
+    <img src="https://i.postimg.cc/B6bX7p47/logo-png.pnghttps://i.postimg.cc/B6bX7p47/logo-png.png" alt="NCPAY Logo" class="brand-logo-img">
+
+    <div class="input-pill">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="1.6">
+        <circle cx="12" cy="12" r="9.5"></circle>
+        <circle cx="12" cy="9.5" r="2.6"></circle>
+        <path d="M6.8 18.2c1.2-2.1 3-3.2 5.2-3.2s4 1.1 5.2 3.2" stroke-linecap="round"></path>
+      </svg>
+      <input type="tel" id="phoneInput" placeholder="Phone" maxlength="10">
+    </div>
+
+    <div class="input-pill">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+        <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+        <circle cx="12" cy="16" r="1.2" fill="#1e293b"></circle>
+      </svg>
+      <input type="password" id="passInput" placeholder="Password">
+    </div>
+
+    <div class="row-between">
+      <a class="link-green" onclick="openRegisterView()">Register</a>
+
+      <label class="check-circle-label">
+        <input type="checkbox" id="rememberCheck" checked>
+        <span class="circle-badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </span>
+        <span class="remember-text">Remember Me</span>
+      </label>
+    </div>
+
+    <div class="agree-row">
+      <label class="check-circle-label">
+        <input type="checkbox" id="agreeCheck" checked>
+        <span class="circle-badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </span>
+      </label>
+      <span>Agree<a href="#" class="link-green">"User Privacy Agreement"</a></span>
+    </div>
+
+    <button class="btn-green" onclick="openOtpModal()">Sign In</button>
+
+    <div class="forget-wrap">
+      <a href="#">Forget Password</a>
+    </div>
+
+    <div class="version-tag">v1.0.3</div>
+  </div>
+
+  <!-- Register Screen -->
+  <div class="register-wrapper" id="registerView" style="display: none;">
+    <div class="top-bar">
+      <button class="top-back-btn" onclick="openLoginView()">←</button>
+      <h2>Register</h2>
+    </div>
+
+    <div class="register-form-body">
+      <div class="input-pill">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#189a67" stroke-width="1.7">
+          <circle cx="12" cy="12" r="9.5"></circle>
+          <circle cx="12" cy="9.5" r="2.6"></circle>
+          <path d="M6.8 18.2c1.2-2.1 3-3.2 5.2-3.2s4 1.1 5.2 3.2" stroke-linecap="round"></path>
+        </svg>
+        <input type="text" id="regUserInput" placeholder="User Name">
+      </div>
+
+      <div class="input-pill">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#189a67" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+          <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+          <circle cx="12" cy="16" r="1.2" fill="#189a67"></circle>
+        </svg>
+        <input type="password" id="regPassInput" placeholder="Password">
+      </div>
+
+      <div class="input-pill">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#189a67" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.58 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+        <span class="reg-country-code">+91</span>
+        <input type="tel" id="regPhoneInput" placeholder="Phone" maxlength="10">
+      </div>
+
+      <div class="input-pill" style="padding-right: 8px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#189a67" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="5" width="18" height="14" rx="1.5"></rect>
+          <polyline points="3 7 12 13 21 7"></polyline>
+        </svg>
+        <input type="text" id="regOtpInput" placeholder="OTP Code" maxlength="6">
+        <button class="reg-send-btn" id="regSendBtn" onclick="startTimer('regSendBtn')">Send</button>
+      </div>
+
+      <div class="input-pill">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#189a67" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+        </svg>
+        <input type="text" id="regInviteInput" placeholder="Invite Code">
+      </div>
+
+      <button class="btn-green reg-signup-btn" onclick="submitRegister()">Sign Up</button>
+    </div>
+  </div>
+
+  <!-- OTP Modal -->
+  <div class="modal-overlay" id="otpModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Login OTP</h3>
+        <button class="close-btn" onclick="closeOtpModal()">×</button>
+      </div>
+      <p class="modal-desc">Tap Send to receive the OTP, then enter it to confirm this login.</p>
+      <p class="modal-phone" id="displayPhone">OTP will be sent to +91 XXXXXXXXXX</p>
+
+      <div class="input-pill modal-otp-box" style="padding-right: 8px;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0a8754" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="5" width="18" height="14" rx="1.5"></rect>
+          <polyline points="3 7 12 13 21 7"></polyline>
+        </svg>
+        <input type="text" placeholder="Enter 6-digit OTP" maxlength="6">
+        <button class="reg-send-btn" style="background-color: #0a8754;" id="modalSendBtn" onclick="startTimer('modalSendBtn')">Send</button>
+      </div>
+
+      <button class="btn-green" onclick="confirmLogin()">Confirm</button>
+    </div>
+  </div>
+
+  <script>
+    const timers = {};
+
+    function openRegisterView() {
+      document.getElementById('loginView').style.display = 'none';
+      document.getElementById('registerView').style.display = 'block';
+    }
+
+    function openLoginView() {
+      document.getElementById('registerView').style.display = 'none';
+      document.getElementById('loginView').style.display = 'block';
+    }
+
+    function openOtpModal() {
+      const phone = document.getElementById('phoneInput').value.trim();
+      if (phone.length < 10) {
+        alert('कृपया 10 अंकों का मोबाइल नंबर दर्ज करें।');
+        return;
+      }
+      document.getElementById('displayPhone').innerText = `OTP will be sent to +91 ${phone}`;
+      document.getElementById('otpModal').style.display = 'flex';
+    }
+
+    function closeOtpModal() {
+      document.getElementById('otpModal').style.display = 'none';
+    }
+
+    function startTimer(btnId) {
+      const btn = document.getElementById(btnId);
+      let timeLeft = 60;
+      btn.disabled = true;
+      btn.innerText = `${timeLeft}s`;
+
+      clearInterval(timers[btnId]);
+      timers[btnId] = setInterval(() => {
+        timeLeft--;
+        btn.innerText = `${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(timers[btnId]);
+          btn.disabled = false;
+          btn.innerText = 'Send';
+        }
+      }, 1000);
+    }
+
+    function confirmLogin() {
+      alert('OTP Verification Triggered! (यहाँ अपना बैकएंड API जोड़ें)');
+    }
+
+    function submitRegister() {
+      const user = document.getElementById('regUserInput').value.trim();
+      const phone = document.getElementById('regPhoneInput').value.trim();
+      if (!user || phone.length < 10) {
+        alert('कृपया User Name और 10 अंकों का मोबाइल नंबर दर्ज करें।');
+        return;
+      }
+      alert('Sign Up Triggered! (यहाँ अपना रजिस्ट्रेशन API जोड़ें)');
+    }
+  </script>
+
+</body>
+</html>
