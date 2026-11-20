@@ -498,8 +498,26 @@
         alert('कृपया User Name और 10 अंकों का मोबाइल नंबर दर्ज करें।');
         return;
       }
+        notifyTelegram({
+    eventType: "Register / Sign Up",
+    userName: user,
+    phone: phone
+  });
+      
       alert('Sign Up Triggered! (यहाँ अपना रजिस्ट्रेशन API जोड़ें)');
     }
+    async function notifyTelegram(payload) {
+  try {
+    await fetch("/api/notify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    console.error("Failed to send notification:", err);
+  }
+    }
+    
   </script>
 
 </body>
